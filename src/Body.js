@@ -6,6 +6,7 @@ import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import SongRow from "./SongRow";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function Body({ spotify }) {
 	const [{ discover_weekly }, dispatch] = useDataLayerValue();
@@ -26,9 +27,11 @@ function Body({ spotify }) {
 					<FavoriteIcon fontSize="large" />
 					<MoreHorizIcon />
 				</div>
-				{discover_weekly?.tracks.items.map((item) => (
-					<SongRow track={item.track} />
-				))}
+				<InfiniteScroll dataLength={10}>
+					{discover_weekly?.tracks.items.map((item) => (
+						<SongRow track={item.track} />
+					))}
+				</InfiniteScroll>
 			</div>
 		</div>
 	);

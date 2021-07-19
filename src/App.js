@@ -14,11 +14,12 @@ function App() {
 		window.location.hash = "";
 		const _token = hash.access_token;
 		if (_token) {
+			spotify.setAccessToken(_token);
+			// setToken(_token);
 			dispatch({
 				type: "SET_TOKEN",
 				token: _token,
 			});
-			spotify.setAccessToken(_token);
 
 			spotify.getMe().then((user) => {
 				dispatch({
@@ -38,11 +39,19 @@ function App() {
 					discover_weekly: response,
 				});
 			});
+			spotify.getMySavedAlbums({ limit: 50 }).then((savedAlbums) => {
+				console.log("savedAlbums", savedAlbums);
+				dispatch({
+					type: "SET_SAVED_ALBUMS",
+					savedAlbums,
+				});
+			});
 		}
-	}, []);
+	}, [token, dispatch]);
 	return (
 		<div className="app">
-			{token ? <Player spotify={spotify} /> : <Login />}
+			{!token && <Login />}
+			{token && <Player spotify={spotify} />}
 		</div>
 	);
 }
